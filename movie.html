@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html ng-app="myApp" ng-controller="mainCtrl">
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<h1>大电影 小制作</h1>
+		<select 
+			name="" id="" 
+			ng-model="selectUrl"
+			ng-change="setCurrentMovies()"
+			>
+			
+			<!--
+			ng-model="selectUrl"
+			selectUrl 和 当前下拉表单 select 的选中的value 进行绑定
+			ng-change 每次 改变表达  都会触发 setCurrentMovies 设置当前显示的电影-->
+			<option value="day.json">单日票房</option>
+			<option value="week.json">单周票房</option>
+			<option value="weeken.json">周末票房</option>
+			<option value="month.json">单月票房</option>
+			<option value="world.json">全球票房</option>
+			<option value="history.json">历史票房</option>
+		</select>
+		<!--
+			循环当前 显示的电影集合  item 就要一条电影数据
+		-->
+		<div ng-repeat="item in currentMovies">
+			<h3>{{item.MovieName}}</h3>
+		</div>
+		<script src="js/angular.min.js"></script>
+		<script>
+			angular.module("myApp",[])
+			.controller("mainCtrl",["$scope","$http",function($scope,$http){
+				$scope.selectUrl="day.json";
+				// 当前选择的 数据地址 url
+				// 设置当前显示电影
+				$scope.setCurrentMovies=function(){
+					// 通过 $http （ajax）结合 当前选择的 url地址
+					$http.get("js/"+$scope.selectUrl)
+					.success(function(res){
+						//当前要显示的电话 = 获取数据
+						$scope.currentMovies=res.data1;
+					})
+				}
+				$scope.setCurrentMovies();
+			}])
+		</script>
+	</body>
+</html>
